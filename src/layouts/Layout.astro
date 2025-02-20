@@ -1,0 +1,46 @@
+---
+const { title = "Mi Portafolio", lang = "es" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang={lang}>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <link rel="stylesheet" href="/src/styles/global.css"> <!-- 🔹 Importa Tailwind -->
+</head>
+<body class="bg-gray-900 text-white dark:bg-white dark:text-black transition-all duration-300">
+
+  <!-- Botón para cambiar de tema -->
+  <button id="theme-toggle" class="fixed top-4 right-4 p-2 bg-gray-700 text-white dark:bg-yellow-400 dark:text-black rounded">
+    🌞
+  </button>
+
+  <slot />
+
+  <!-- Script de cambio de tema -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const html = document.documentElement;
+      const themeToggle = document.getElementById("theme-toggle");
+
+      // Verifica si hay un tema guardado en localStorage
+      const savedTheme = localStorage.getItem("theme");
+
+      if (savedTheme) {
+        html.classList.toggle("dark", savedTheme === "dark");
+        themeToggle.innerHTML = savedTheme === "dark" ? "🌙" : "🌞";
+      }
+
+      // Evento para cambiar el tema
+      themeToggle.addEventListener("click", () => {
+        html.classList.toggle("dark");
+        const newTheme = html.classList.contains("dark") ? "dark" : "light";
+        localStorage.setItem("theme", newTheme);
+        themeToggle.innerHTML = newTheme === "dark" ? "🌙" : "🌞";
+      });
+    });
+  </script>
+</body>
+</html>
